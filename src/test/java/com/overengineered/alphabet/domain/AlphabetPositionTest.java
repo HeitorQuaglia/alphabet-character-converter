@@ -18,37 +18,47 @@ class AlphabetPositionTest {
 
     @Test
     void shouldRejectZero() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> AlphabetPosition.from(0)
-        );
-        assertTrue(exception.getMessage().contains("between 1 and 26"));
+        assertThrows(IllegalArgumentException.class, () -> AlphabetPosition.from(0));
     }
 
     @Test
     void shouldRejectNegativeValues() {
-        assertThrows(IllegalArgumentException.class, () -> AlphabetPosition.from(-5));
+        assertThrows(IllegalArgumentException.class, () -> AlphabetPosition.from(-1));
+        assertThrows(IllegalArgumentException.class, () -> AlphabetPosition.from(-100));
     }
 
     @Test
     void shouldRejectValuesAbove26() {
+        assertThrows(IllegalArgumentException.class, () -> AlphabetPosition.from(27));
         assertThrows(IllegalArgumentException.class, () -> AlphabetPosition.from(100));
     }
 
     @Test
     void shouldBeEqualForSamePosition() {
-        AlphabetPosition pos1 = AlphabetPosition.from(13);
-        AlphabetPosition pos2 = AlphabetPosition.from(13);
+        AlphabetPosition a = AlphabetPosition.from(5);
+        AlphabetPosition b = AlphabetPosition.from(5);
 
-        assertEquals(pos1, pos2);
-        assertEquals(pos1.hashCode(), pos2.hashCode());
+        assertEquals(a, b);
+        assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     void shouldNotBeEqualForDifferentPositions() {
-        AlphabetPosition pos1 = AlphabetPosition.from(1);
-        AlphabetPosition pos2 = AlphabetPosition.from(2);
+        AlphabetPosition a = AlphabetPosition.from(1);
+        AlphabetPosition b = AlphabetPosition.from(2);
 
-        assertNotEquals(pos1, pos2);
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void shouldReturnCorrectValue() {
+        AlphabetPosition position = AlphabetPosition.from(13);
+        assertEquals(13, position.value());
+    }
+
+    @Test
+    void toStringShouldContainValue() {
+        AlphabetPosition position = AlphabetPosition.from(7);
+        assertTrue(position.toString().contains("7"));
     }
 }

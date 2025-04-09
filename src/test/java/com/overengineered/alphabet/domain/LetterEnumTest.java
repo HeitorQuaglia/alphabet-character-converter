@@ -12,9 +12,9 @@ class LetterEnumTest {
     @Test
     void shouldReturnEnumForValidPositions() {
         IntStream.rangeClosed(1, 26).forEach(pos -> {
-            Optional<LetterEnum> result = LetterEnum.fromPosition(pos);
-            assertTrue(result.isPresent(), "Expected letter for position: " + pos);
-            assertEquals(pos, result.get().position());
+            Optional<LetterEnum> maybeLetter = LetterEnum.fromPosition(pos);
+            assertTrue(maybeLetter.isPresent(), "Expected letter for position: " + pos);
+            assertEquals(pos, maybeLetter.get().position());
         });
     }
 
@@ -28,11 +28,11 @@ class LetterEnumTest {
 
     @Test
     void shouldConvertToAlphabetCharacterCorrectly() {
-        LetterEnum letter = LetterEnum.C;
+        LetterEnum letter = LetterEnum.E;
         AlphabetCharacter character = letter.toAlphabetCharacter();
 
-        assertEquals('C', character.value());
-        assertEquals(3, letter.position());
+        assertEquals('E', character.value());
+        assertEquals("E", character.asString());
     }
 
     @Test
@@ -41,5 +41,10 @@ class LetterEnumTest {
         for (LetterEnum letter : LetterEnum.values()) {
             assertEquals(expected++, letter.position());
         }
+    }
+
+    @Test
+    void toStringShouldIncludeName() {
+        assertTrue(LetterEnum.A.toString().contains("A"));
     }
 }

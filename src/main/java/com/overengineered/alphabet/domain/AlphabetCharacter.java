@@ -1,5 +1,8 @@
 package com.overengineered.alphabet.domain;
 
+import com.overengineered.alphabet.exception.InvalidLetterException;
+import com.overengineered.alphabet.exception.LetterOutOfRangeException;
+
 import java.util.Objects;
 
 public final class AlphabetCharacter {
@@ -17,11 +20,11 @@ public final class AlphabetCharacter {
 
     private static void validate(char value) {
         if (!Character.isLetter(value)) {
-            throw new IllegalArgumentException("Value must be a letter.");
+            throw new InvalidLetterException();
         }
         char upper = Character.toUpperCase(value);
         if (upper < 'A' || upper > 'Z') {
-            throw new IllegalArgumentException("Letter must be between A and Z.");
+            throw new LetterOutOfRangeException();
         }
     }
 

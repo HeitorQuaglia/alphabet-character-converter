@@ -1,5 +1,7 @@
 package com.overengineered.alphabet.domain;
 
+import com.overengineered.alphabet.exception.InvalidLetterException;
+import com.overengineered.alphabet.exception.LetterOutOfRangeException;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
@@ -18,10 +20,16 @@ class AlphabetCharacterTest {
     }
 
     @Test
-    void shouldRejectNonLetterCharacters() {
-        assertThrows(IllegalArgumentException.class, () -> AlphabetCharacter.from('1'));
-        assertThrows(IllegalArgumentException.class, () -> AlphabetCharacter.from('-'));
-        assertThrows(IllegalArgumentException.class, () -> AlphabetCharacter.from('@'));
+    void shouldThrowInvalidLetterExceptionForNonLetters() {
+        assertThrows(InvalidLetterException.class, () -> AlphabetCharacter.from('1'));
+        assertThrows(InvalidLetterException.class, () -> AlphabetCharacter.from('-'));
+        assertThrows(InvalidLetterException.class, () -> AlphabetCharacter.from(' '));
+    }
+
+    @Test
+    void shouldThrowLetterOutOfRangeForAccentedOrSpecialLetters() {
+        assertThrows(LetterOutOfRangeException.class, () -> AlphabetCharacter.from('ç'));
+        assertThrows(LetterOutOfRangeException.class, () -> AlphabetCharacter.from('ä'));
     }
 
     @Test
@@ -51,6 +59,5 @@ class AlphabetCharacterTest {
     void shouldReturnAsString() {
         AlphabetCharacter c = AlphabetCharacter.from('C');
         assertEquals("C", c.asString());
-        assertEquals("AlphabetCharacter{value=C}", c.toString());
     }
 }

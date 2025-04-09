@@ -29,6 +29,7 @@ Aqui temos:
 - Build nativo com GraalVM
 - Dockerfile multi-stage com usuário não-root
 - Health checks declarados no `docker-compose`
+- Suporte completo a internacionalização com `Accept-Language`
 - E mais...
 
 Tudo isso para resolver um problema que o Java nativo faz com:
@@ -79,6 +80,41 @@ GET http://localhost:8080/alphabet/1
 
 ---
 
+## Suporte a Internacionalização (i18n)
+
+Esta API suporta múltiplos idiomas com base no header HTTP `Accept-Language`.
+
+### Idiomas disponíveis:
+
+- 🇺🇸 **Inglês** (padrão) – `en`, `en-US`, etc.
+- 🇧🇷 **Português (Brasil)** – `pt-BR`
+
+### Exemplo de uso:
+
+#### Requisição com idioma **Inglês** (default)
+
+```bash
+curl -H "Accept-Language: en" http://localhost:8080/alphabet/0
+```
+
+```json
+{ "error": "Invalid position: 0. Must be between 1 and 26." }
+```
+
+#### Requisição com idioma **Português (Brasil)**
+
+```bash
+curl -H "Accept-Language: pt-BR" http://localhost:8080/alphabet/0
+```
+
+```json
+{ "error": "Posição inválida: 0. Deve estar entre 1 e 26." }
+```
+
+> Se o header `Accept-Language` não for enviado, a API assumirá `en` como padrão.
+
+---
+
 ## Testes e cobertura
 
 ```bash
@@ -123,7 +159,3 @@ Pull requests que adicionem **camadas desnecessárias**, **padrões de design ir
 
 Este projeto não tem propósito prático.  
 É só **elegância desnecessária em estado puro**.
-
-> Porque às vezes... a melhor forma de aprender é ir longe demais de propósito.
-
----

@@ -14,11 +14,20 @@ class ResolveAlphabetCharacterTest {
     private final ResolveAlphabetCharacter useCase = new ResolveAlphabetCharacter();
 
     @Test
-    void shouldResolveCharacterForValidPositions() {
-        IntStream.rangeClosed(1, 26).forEach(pos -> {
-            AlphabetPosition position = AlphabetPosition.from(pos);
+    void shouldResolveCorrectCharacterForEachValidPosition() {
+        IntStream.rangeClosed(1, 26).forEach(i -> {
+            AlphabetPosition position = AlphabetPosition.from(i);
             AlphabetCharacter character = useCase.getCharacterByPosition(position);
-            assertEquals((char) ('A' + pos - 1), character.value());
+            assertEquals((char) ('A' + i - 1), character.value());
         });
+    }
+
+    @Test
+    void shouldReturnUppercaseLettersOnly() {
+        AlphabetPosition position = AlphabetPosition.from(2);
+        AlphabetCharacter character = useCase.getCharacterByPosition(position);
+
+        assertEquals('B', character.value());
+        assertEquals("B", character.asString());
     }
 }
