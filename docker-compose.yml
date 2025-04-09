@@ -1,0 +1,15 @@
+services:
+  alphabet-api:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.native
+    image: alphabet-api-native:1.0.0
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/q/ready"]
+      interval: 10s
+      timeout: 3s
+      retries: 3

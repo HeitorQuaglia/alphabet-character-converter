@@ -1,67 +1,129 @@
-# alphabet-character-converter
+# Alphabet Character Converter
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+> Possivelmente o projeto mais **overengineered** que você já se deparou para converter um número entre 1 e 26 em uma letra do alfabeto.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+---
 
-## Running the application in dev mode
+## O que é isso?
 
-You can run your application in dev mode that enables live coding using:
+Uma API REST em Quarkus que converte:
 
-```shell script
-./gradlew quarkusDev
+```
+GET /alphabet/1 → "A"
+GET /alphabet/26 → "Z"
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Só isso?
 
-## Packaging and running the application
+**Não.**
 
-The application can be packaged using:
+Aqui temos:
 
-```shell script
-./gradlew build
+- Arquitetura Hexagonal (Ports & Adapters)
+- Princípios SOLID e Object Calisthenics
+- Value Objects imutáveis para letras e posições
+- Enum com mapeamento inteligente
+- Fábricas para erro e resposta
+- Casos de uso nomeados com intenção
+- Testes unitários, integração e cobertura Jacoco
+- Build nativo com GraalVM
+- Dockerfile multi-stage com usuário não-root
+- Health checks declarados no `docker-compose`
+- E mais...
+
+Tudo isso para resolver um problema que o Java nativo faz com:
+
+```java
+(char)('A' + n - 1)
 ```
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
+Mas qual a graça nisso?
 
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
+---
 
-If you want to build an _über-jar_, execute the following command:
+## Filosofia
 
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
+> O caminho do desenvolvedor sênior é saber quando **não** usar tudo isso.  
+> O caminho do entusiasta é usar **de propósito**, só pra ver até onde dá.
+
+Este repositório é um exercício real de engenharia exagerada aplicada com seriedade.
+
+---
+
+## Como rodar localmente
+
+Requisitos:
+
+- Java 17+
+- Docker
+
+### 1. Build nativo com Docker:
+
+```bash
+docker compose up --build
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
+A API estará disponível em:
 
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
+```
+GET http://localhost:8080/alphabet/1
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+### 2. Health Checks:
 
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
+| Tipo       | Endpoint                     |
+|------------|------------------------------|
+| Geral      | `http://localhost:8080/q/health` |
+| Liveness   | `http://localhost:8080/q/live`   |
+| Readiness  | `http://localhost:8080/q/ready`  |
+
+---
+
+## Testes e cobertura
+
+```bash
+./gradlew test jacocoTestReport
 ```
 
-You can then execute your native executable with: `./build/alphabet-character-converter-1.0.0-SNAPSHOT-runner`
+Relatório em:  
+`build/reports/jacoco/test/html/index.html`
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
+---
 
-## Related Guides
+## Exemplos de uso
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
+```bash
+curl http://localhost:8080/alphabet/3
+# → { "letter": "C" }
+```
 
-## Provided Code
+```bash
+curl http://localhost:8080/alphabet/0
+# → { "error": "Invalid position: 0. Must be between 1 and 26." }
+```
 
-### REST
+---
 
-Easily start your REST Web Services
+## Segurança
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- Imagem UBI minimal (≈ 14MB)
+- Binário estático
+- Executando como usuário `quarkus` (não-root)
+- Sem dependência externa ou banco de dados
+
+---
+
+## Contribua com exageros
+
+Pull requests que adicionem **camadas desnecessárias**, **padrões de design irrelevantes** ou **anotações inúteis** são bem-vindas — mas devem seguir os princípios do projeto com **100% de testes e cobertura**.
+
+---
+
+## Feito para fins educacionais
+
+Este projeto não tem propósito prático.  
+É só **elegância desnecessária em estado puro**.
+
+> Porque às vezes... a melhor forma de aprender é ir longe demais de propósito.
+
+---
